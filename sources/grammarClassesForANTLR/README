@@ -1,0 +1,5 @@
+This project collects some grammar class-related illustrations of ANTLR.
+The following blog post first described some version of the suite of examples:
+http://professor-fish.blogspot.com/2011/04/test-driven-grammar-class-understanding.html
+See the Makefile for building and running the ANTLR parsers.
+Run "make" before opening the project in Eclipse.
