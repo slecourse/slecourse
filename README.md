@@ -1,1 +1,1 @@
-See the [wiki](https://github.com/rlaemmel/slecourse/wiki) for all information.
+See the [wiki](https://github.com/slecourse/slecourse/wiki) for all information.
