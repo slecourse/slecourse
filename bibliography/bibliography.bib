@@ -1,3 +1,19 @@
+@inproceedings{SirerB99,
+  author    = {Emin G{\"u}n Sirer and
+               Brian N. Bershad},
+  title     = {Using production grammars in software testing},
+  pages     = {1-13},
+  booktitle = {Proceedings of the Second Conference on Domain-Specific
+               Languages (DSL '99), Austin, Texas, USA, October 3-5, 1999},
+  publisher = {ACM},
+  year      = {1999},
+  isbn      = {1-58113-255-7},
+  ee        = {http://dl.acm.org/citation.cfm?id=331960},
+  bibsource = {DBLP, http://dblp.uni-trier.de},
+  annote = {This paper shows how grammar-based test-data generation and an accompanying methodology of testing may be highly effective and scalable for testing language-based software. Previously, grammar-based testing was mainly focused on compiler testing. The paper specifically tests the Java virtual machine.},
+  note = "\added{Ralf L\"ammel} \available{http://www.cs.cornell.edu/people/egs/papers/kimera-dsl99.pdf}"
+}
+
 @article{KlintLV05,
   author    = "{Paul Klint and
                Ralf L{\"a}mmel and
@@ -12,6 +28,38 @@
   bibsource = {DBLP, http://dblp.uni-trier.de},
   annote    = "This paper surveys SLE (or grammarware engineering) by making an inventory of grammarware, describing some problems with the proper engineering of grammarware, stating some promises of addressing grammarware engineering more seriously, listing some matured or emerging principles of grammarware engineering, and calling out a list of research challenges.",
   note      = "\added{Ralf L\"ammel} \available{http://www.cs.vu.nl/grammarware/agenda/paper.pdf}"
+}
+
+@inproceedings{LaemmelS06,
+  author    = {Ralf L{\"a}mmel and
+               Wolfram Schulte},
+  title     = {Controllable Combinatorial Coverage in Grammar-Based Testing},
+  pages     = {19-38},
+  booktitle = {Testing of Communicating Systems, 18th IFIP TC6/WG6.1 International
+               Conference, TestCom 2006, New York, NY, USA, May 16-18,
+               2006, Proceedings},
+  publisher = {Springer},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {3964},
+  year      = {2006},
+  isbn      = {3-540-34184-6},
+  bibsource = {DBLP, http://dblp.uni-trier.de},
+  annote = {This paper describes a highly systematic and scalable approach to grammar-based testing. The grammar is essentially interpreted in a combinatorial sense and a number of well-defined control mechanisms help with deriving test data of the intented shape, size, and number while also avoiding combinatorial explosion. The approach has been implemented in C\# and used for grammar-based testing in the .NET platform. Combinatorial explorations constrasts with randomized test-data generation. This paper provides a broad discussion of related work.},
+  note = "\added{Ralf L\"ammel} \available{http://homepages.cwi.nl/~ralf/ccc/paper.pdf}"
+}
+
+@article{Tratt08,
+  author    = {Laurence Tratt},
+  title     = {Domain specific language implementation via compile-time
+               meta-programming},
+  journal   = {ACM Trans. Program. Lang. Syst.},
+  volume    = {30},
+  number    = {6},
+  year      = {2008},
+  ee        = {http://doi.acm.org/10.1145/1391956.1391958},
+  bibsource = {DBLP, http://dblp.uni-trier.de},
+  annote = {This paper describes an embedding approach for the implementation of domain-specific languages (DSLs). The approach is based on the Converge programming language and uses its compile-time meta-programming facility. The accompanying methodoogy is meant to simplify DSL implementations and improve their quality.},
+  note = "\added{Ralf L\"ammel} \available{http://eprints.mdx.ac.uk/5920/1/Tratt-domain_specifci_language_implementation.pdf}"
 }
 
 @article{FavreGLW09,
@@ -30,4 +78,103 @@
   bibsource = {DBLP, http://dblp.uni-trier.de},
   annote    = {This is not a technical paper, but rather an extended introduction to a special issue on SLE. This text provides a relatively early but somewhat matured description of the notions SLE and software languages. Also, the papers of the special issue provide a good test harness for discussing these notions.},
   note      = "\added{Ralf L\"ammel} \available{http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=5353438}"
+}
+
+@inproceedings{RenggliGN10,
+  author    = {Lukas Renggli and
+               Tudor G\^{\i}rba and
+               Oscar Nierstrasz},
+  title     = {Embedding Languages without Breaking Tools},
+  pages     = {380-404},
+  ee        = {http://dx.doi.org/10.1007/978-3-642-14107-2_19},
+  booktitle = {ECOOP 2010 - Object-Oriented Programming, 24th European
+               Conference, Maribor, Slovenia, June 21-25, 2010. Proceedings},
+  publisher = {Springer},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {6183},
+  year      = {2010},
+  isbn      = {978-3-642-14106-5},
+  ee        = {http://dx.doi.org/10.1007/978-3-642-14107-2},
+  bibsource = {DBLP, http://dblp.uni-trier.de},
+  annote = {This paper describes an embedding approach for the implementation of domain-specific languages (DSLs). Specifically, DSLs are modeled as language extensions of the underlying host language. The approach addresses the challenge of providing the language extensions in a manner that they integrate well with the development tools of the host language. The paper presents the extensible system Helvetia which intercepts the compilation pipeline of the Smalltalk host language to seamlessly integrate language extensions.},
+  note = "\added{Ralf L\"ammel} \available{http://scg.unibe.ch/archive/papers/Reng10aEmbeddingLanguages.pdf}"
+}
+
+@inproceedings{ErdwegRKO11,
+  author    = {Sebastian Erdweg and
+               Tillmann Rendel and
+               Christian K{\"a}stner and
+               Klaus Ostermann},
+  title     = {SugarJ: library-based syntactic language extensibility},
+  pages     = {391-406},
+  booktitle = {Proceedings of the 26th Annual ACM SIGPLAN Conference on
+               Object-Oriented Programming, Systems, Languages, and Applications,
+               OOPSLA 2011, part of SPLASH 2011, Portland, OR, USA, October
+               22 - 27, 2011},
+  publisher = {ACM},
+  year      = {2011},
+  isbn      = {978-1-4503-0940-0},
+  bibsource = {DBLP, http://dblp.uni-trier.de},
+  annote = {This paper describes SugarJ---an approach to enhance Java's library notion with syntactic sugar, hence providing an easy-to-use language extension approach. For instance, XML, Java closures, and XML schemas can be integrated into the Java language in this way. SugarJ leverages SDF for syntax definitions, Stratego for the underlying transformation framework. SugarJ provides an incremental parsing approach so that library imports can affect parsing past the import.},
+  note = "\added{Ralf L\"ammel} \available{http://www.informatik.uni-marburg.de/~rendel/erdweg11sugarj.pdf}"
+}
+
+@inproceedings{ErwigW11,
+  author    = {Martin Erwig and
+               Eric Walkingshaw},
+  title     = {Semantics First! - Rethinking the Language Design Process},
+  pages     = {243-262},
+  booktitle = {Software Language Engineering - 4th International Conference,
+               SLE 2011, Braga, Portugal, July 3-4, 2011, Revised Selected
+               Papers},
+  publisher = {Springer},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {6940},
+  year      = {2012},
+  isbn      = {978-3-642-28829-6},
+  ee        = {http://dx.doi.org/10.1007/978-3-642-28830-2},
+  bibsource = {DBLP, http://dblp.uni-trier.de},
+  annote = {This paper suggests a semantics-centric approach to language design as opposed to a more syntax-based one. Haskell is used as a metalanguage. General language operators are employed to adapt and grow sophisticated languages out of simple semantics concepts.},
+  note = "\added{Ralf L\"ammel} \available{http://web.engr.oregonstate.edu/~erwig/papers/SemanticsFirst_SLE11.pdf}"
+}
+
+@inproceedings{HerrmannsdoerferVW10,
+  author    = {Markus Herrmannsdoerfer and
+               Sander Vermolen and
+               Guido Wachsmuth},
+  title     = {An Extensive Catalog of Operators for the Coupled Evolution
+               of Metamodels and Models},
+  pages     = {163-182},
+  booktitle = {Software Language Engineering - Third International Conference,
+               SLE 2010, Eindhoven, The Netherlands, October 12-13, 2010,
+               Revised Selected Papers},
+  publisher = {Springer},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {6563},
+  year      = {2011},
+  isbn      = {978-3-642-19439-9},
+  ee        = {http://dx.doi.org/10.1007/978-3-642-19440-5},
+  bibsource = {DBLP, http://dblp.uni-trier.de},
+  annote = {This paper deals with the coupled evolution of metamodels and models (in a MOF/EMF-like context). Such coupling has been studied intensively by the SLE and MDE communities and the present paper aims at a particularly ``complete'' catalog of operators for coupled transformation.},
+  note = "\added{Ralf L\"ammel} \available{http://www.st.ewi.tudelft.nl/~vermolen/pmwiki/uploads/Main/HerrmannsdoerferVW10.pdf}"
+}
+
+@inproceedings{RuscioLP10,
+  author    = {Davide Di Ruscio and
+               Ralf L{\"a}mmel and
+               Alfonso Pierantonio},
+  title     = {Automated Co-evolution of GMF Editor Models},
+  pages     = {143-162},
+  booktitle = {Software Language Engineering - Third International Conference,
+               SLE 2010, Eindhoven, The Netherlands, October 12-13, 2010,
+               Revised Selected Papers},
+  publisher = {Springer},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {6563},
+  year      = {2011},
+  isbn      = {978-3-642-19439-9},
+  ee        = {http://dx.doi.org/10.1007/978-3-642-19440-5},
+  bibsource = {DBLP, http://dblp.uni-trier.de},
+  annote = {This paper studies coupled evolution in the context of Eclipse Modeling Framework (EMF) and the associated Graphical Modeling Framework (GMF). In this context, we face several coupled models; if the domain model changes, then several other models must co-change. The problem is interesting because of the heterogeneity of the involved models.},
+  note = "\added{Ralf L\"ammel} \available{http://userpages.uni-koblenz.de/~laemmel/gmfco/paper.pdf}"
 }
