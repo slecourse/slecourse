@@ -1,0 +1,20 @@
+\documentclass[12pt]{article}
+
+\usepackage[colorlinks=true,urlcolor=blue]{hyperref}
+
+\newcommand{\added}[1]{Entry added by \emph{#1}.}
+\newcommand{\available}[1]{Paper available online at \emph{\url{#1}}.}
+
+\begin{document}
+
+\title{\emph{SLECOURSE}: Annotated Bibliography\thanks{http://slecourse.github.com/slecourse}}
+
+\date{\today}
+
+\maketitle
+
+\nocite{*}
+
+\bibliographystyle{plain-annote}
+\bibliography{bibliography}
+\end{document}
