@@ -4,3 +4,5 @@ s : (p 'x') => p 'x'
 p : 'a' p 'b' | ;
 
 // Ok! We make the choice based on syntactic predicates.
+
+WS : (' '|'\r'? '\n'|'\t')+ {skip();};

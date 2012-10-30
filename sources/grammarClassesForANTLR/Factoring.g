@@ -5,3 +5,4 @@ p : 'a' p 'b' | ;
 
 // Ok! Perfectly factored.
 
+WS : (' '|'\r'? '\n'|'\t')+ {skip();};
