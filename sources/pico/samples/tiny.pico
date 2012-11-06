@@ -1,0 +1,1 @@
+begin declare x : natural; x := 47 end

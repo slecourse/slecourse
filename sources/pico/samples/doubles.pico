@@ -1,0 +1,3 @@
+begin declare x : natural,  
+              x : string;
+end
