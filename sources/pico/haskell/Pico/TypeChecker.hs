@@ -2,7 +2,7 @@ module Pico.TypeChecker where
 
 import Prelude hiding (lookup)
 import Pico.AbstractSyntax
-import Data.Map (Map, toList, fromListWith, lookup)
+import Data.Map (Map, toList, fromListWith, fromList, lookup)
 
 -- Error messages
 type Error = (
@@ -18,7 +18,7 @@ typeCheckProgram :: Program -> [Error]
 typeCheckProgram (ds, ss)
  = typeCheckDecls ds ++ typeCheckStms env ss
  where
-  env = fromListWith (const id) ds
+  env = fromList ds
 
 typeCheckDecls :: [Decl] -> [Error]
 typeCheckDecls ds

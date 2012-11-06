@@ -5,12 +5,12 @@ import Text.PrettyPrint.HughesPJ
 type FlowChart = ([Box], [Arrow])
 type Box = (Id, BoxType)
 type Id = String -- Identifier for boxes
-type Text = String -- Text to show
 data BoxType
  = Start
  | End
- | Decision String
- | Activity String
+ | Decision Text
+ | Activity Text
+type Text = String -- Text to show
 type Arrow = ((Id, FromType), Id)
 data FromType
  = FromStart
