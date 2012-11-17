@@ -1,0 +1,1 @@
+This directory collects a number of implementations of a number of language processing problems. All implementations rely on or encode attribute grammars for some part. See the subdirectories for additional details for the individual problems.
