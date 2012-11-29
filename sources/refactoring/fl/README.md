@@ -1,2 +1,1 @@
-TBD
-
+A refactoring for inlining lets in a simple functional language is implemented in Haskell. This refactoring can be used in a lecture on automated refactoring.
