@@ -1,0 +1,9 @@
+toy: toy.cpp Makefile
+	${build} -o toy
+
+%.run: toy
+	./toy < ../../samples/$*.Kaleidoscope
+
+clean:
+	rm -f toy
+	rm -rf toy.dSYM
