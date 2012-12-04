@@ -1,4 +1,4 @@
-++ Summary 
+# Summary 
 
 All these examples have been extracted from the LLVM documentation http://llvm.org/docs/tutorial/index.html They are only provided here for convenience / simplicity of access. The underlying code is also somehow packaged with the code distribution of LLVM, but the present C++ code and sample code has been extracted right away from the documentation.
 
@@ -6,7 +6,7 @@ The examples are part of the tutorial whose purpose is summarized by the documen
 
 The corresponding language is called Kaleidoscope.
 
-++ Processors
+# Processors
 
 See subdirectory "processors"; these are processors for the Kaleidoscope language.
 
@@ -17,7 +17,7 @@ See subdirectory "processors"; these are processors for the Kaleidoscope languag
 * operators: Precedence parsing is used to support user-defined operators in the language. In terms of code generation, such (unary and binary) operators are essentially handled like regular functions. The resulting expressiveness is also well suited to demonstrate the utility of extern functions that can be used within Kaleidoscope.
 * mvars: Mutable variables are enabled, thereby making the transition from a pure functional language to an imperative language. At the IR end of things, this requires the use of stack-allocated memory as opposed SSA-form variables.
 
-++ Samples
+# Samples
 
 See subdirectory "samples"; these are samples in the Kaleidoscope language.
 
