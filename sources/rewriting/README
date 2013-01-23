@@ -1,0 +1,24 @@
+These are different attempts at some sort of rewriting in Prolog.
+
+This code is used in a lecture on rewriting and strategies.
+
+http://softlang.wikidot.com/course:sle
+
+Option "traversal":
+
+The rewrite rules include traversal.
+This is actually very similar to SOS.
+Thus, the rewrite rules must find redexes by themselves.
+
+Option "normalization":
+
+The syntax definition also defines normalforms.
+Redexes are searched top-down, left-to-right.
+Rules are applied to redexes.
+This process is iterated until a normalform is reached.
+
+Option "control":
+
+Stratego/Strafunski/et al.-like strategies are defined.
+To this end, higher-order predicates are used.
+
