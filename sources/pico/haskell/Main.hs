@@ -4,6 +4,7 @@ import Pico.PrettyPrinter
 import Pico.TypeChecker
 import Pico.Interpreter
 import Pico.Compiler
+import Pico.Machine
 import Pico.Visualizer
 
 main 
@@ -20,6 +21,8 @@ main
       print store
       let code = compileProgram ast
       print code
+      let mem = run code
+      print mem
       toFlowChart ast "../samples/factorial.dot"
 
 -- Testing the type checker
