@@ -1,0 +1,26 @@
+module concretesyntax/EditorServices
+
+ imports org/sugarj/java/init/InitTrans org/sugarj/languages/EditorServices org/sugarj/languages/Stratego concretesyntax/MetaExplode
+
+
+signature
+  constructors
+    ToMetaExpr : iter-star() -> StrategoTerm()
+    ToMetaExpr : iter-star() -> StrategoTerm()
+
+
+signature
+  constructors
+    FromMetaExpr : StrategoTerm() -> EditorServiceNode()
+    FromMetaExpr : StrategoTerm() -> EditorServiceNode()
+    FromMetaExpr : StrategoTerm() -> EditorServiceRefactoringRule()
+    FromMetaExpr : StrategoTerm() -> EditorServiceBuilderRule()
+    FromMetaExpr : StrategoTerm() -> EditorServiceCompletionRule()
+    FromMetaExpr : StrategoTerm() -> EditorServiceReferenceRule()
+    FromMetaExpr : StrategoTerm() -> EditorServicePropertyValue()
+    FromMetaExpr : StrategoTerm() -> EditorServiceCompletionPart()
+    FromMetaExpr : StrategoTerm() -> EditorServiceStrategoCall()
+    FromMetaExpr : StrategoTerm() -> EditorServiceSemanticNode()
+    FromMetaExpr : StrategoTerm() -> EditorServiceCompletionPart()
+    FromMetaExpr : StrategoTerm() -> EditorServiceAttribute()
+    FromMetaExpr : StrategoTerm() -> EditorServiceString()

@@ -1,0 +1,12 @@
+module graphdsl/Checks
+
+ imports org/sugarj/java/init/InitTrans graphdsl/Sugar
+
+
+rules
+
+  constraint-error :
+    GraphEdge(a, b) -> [ (a, "edge references itself")
+                       , (b, "edge references itself")
+                       ]
+    where <equal> (a, b)

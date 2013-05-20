@@ -1,0 +1,38 @@
+package graphdsl;
+ 
+import graphdsl.Sugar;
+
+// Import to denie self references in graphs
+//import graphdsl.Checks;
+ 
+public class Main {  
+	public static void main(String[] args) {
+		System.out.println();
+		System.out.println("Demonstration of graph DSL:");
+		
+		Graph g1 { 
+			start1 -> mid
+			start2 -> mid 
+			start3 -> mid
+			mid -> mid
+		}
+		System.out.println(g1);
+		g1 +> 
+			mid -> end
+			end -> nirvana;
+		System.out.println(g1);
+		System.out.println();
+		 
+		 
+		Graph g2 { 
+			start1 -> mid,
+			start2 -> mid,
+			start3 -> mid
+		}
+		System.out.println(g2);
+		g2 +> mid -> end, end -> nirvana;
+		System.out.println(g2);
+		System.out.println();
+	}
+} 
+ 

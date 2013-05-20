@@ -1,0 +1,4 @@
+module concretesyntax/TestAux
+ imports org/sugarj/java/init/initGrammar concretesyntax/Java
+exports 
+  (/)

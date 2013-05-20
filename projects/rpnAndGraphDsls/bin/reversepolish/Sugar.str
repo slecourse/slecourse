@@ -1,0 +1,27 @@
+module reversepolish/Sugar
+
+ imports org/sugarj/java/init/InitTrans org/sugarj/languages/Java concretesyntax/Java
+
+
+signature
+  constructors
+    Invoke      : JavaMethodSpec() * iter-star-sep() -> RPExpr()
+    Plus        : RPExpr() * RPExpr() -> RPExpr()
+    Minus       : RPExpr() * RPExpr() -> RPExpr()
+    Mul         : RPExpr() * RPExpr() -> RPExpr()
+    Div         : RPExpr() * RPExpr() -> RPExpr()
+    Remain      : RPExpr() * RPExpr() -> RPExpr()
+    LeftShift   : RPExpr() * RPExpr() -> RPExpr()
+    RightShift  : RPExpr() * RPExpr() -> RPExpr()
+    URightShift : RPExpr() * RPExpr() -> RPExpr()
+    Lt          : RPExpr() * RPExpr() -> RPExpr()
+    Gt          : RPExpr() * RPExpr() -> RPExpr()
+    LtEq        : RPExpr() * RPExpr() -> RPExpr()
+    GtEq        : RPExpr() * RPExpr() -> RPExpr()
+    Eq          : RPExpr() * RPExpr() -> RPExpr()
+    NotEq       : RPExpr() * RPExpr() -> RPExpr()
+    LazyAnd     : RPExpr() * RPExpr() -> RPExpr()
+    LazyOr      : RPExpr() * RPExpr() -> RPExpr()
+    And         : RPExpr() * RPExpr() -> RPExpr()
+    ExcOr       : RPExpr() * RPExpr() -> RPExpr()
+    Or          : RPExpr() * RPExpr() -> RPExpr()

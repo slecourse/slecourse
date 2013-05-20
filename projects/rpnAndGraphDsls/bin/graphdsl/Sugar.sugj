@@ -1,0 +1,58 @@
+package graphdsl;
+
+import org.sugarj.languages.Java;
+import concretesyntax.Java;
+ 
+public sugar Sugar {
+
+  context-free syntax
+    -> JavaExpr {cons("GraphCons"), reject}
+    JavaStm JavaExpr -> JavaStm {cons("GraphDecl"), reject}
+    
+    "Graph" JavaId "{" "}"            -> JavaStm {cons("GraphDef")}
+    "Graph" JavaId "{" GraphEdges "}" -> JavaStm {cons("GraphDef")}
+    
+    JavaId "->" JavaId                -> GraphEdge {cons("GraphEdge")}
+    
+    GraphEdge                         -> GraphEdges
+    GraphEdge GraphEdges              -> GraphEdges {cons("GraphEdges")}
+    GraphEdge "," GraphEdges          -> GraphEdges {cons("GraphEdges")}
+     
+    JavaExpr "+>" GraphEdges          -> JavaExpr {cons("GraphAddEdges")}
+  
+  desugarings
+    desugaring-graph
+    
+  rules
+    desugaring-graph : GraphDef(name) -> 
+      GraphDecl(name, GraphCons)
+    
+    desugaring-graph : GraphDef(name, edges) -> 
+      GraphDecl(name, GraphAddEdges(GraphCons, edges))
+    
+    desugaring-graph : GraphAddEdges(g, GraphEdges(edge, edges)) -> 
+      GraphAddEdges(GraphAddEdges(g, edge), edges)
+    
+    desugaring-graph : GraphAddEdges(g, GraphEdge(a, b)) -> 
+      Invoke(
+      	Method(g, None(), Id("addEdge")), 
+      	[
+      		Lit(String([a])),
+      		Lit(String([b]))
+      	]
+      )
+    
+    desugaring-graph : GraphDecl(name, graph) -> 
+      LocalVarDecStm(LocalVarDec([], 
+        ClassOrInterfaceType(TypeName(PackageOrTypeName(Id("graphdsl")), Id("Graph")), None()), 
+    	  [ VarDec(name, graph) ]
+		))
+    
+    desugaring-graph : GraphCons -> 
+      NewInstance(
+        None(), 
+      	ClassOrInterfaceType(TypeName(PackageOrTypeName(Id("graphdsl")), Id("Graph")), None()), 
+      	[], 
+      	 None()
+	  )
+}

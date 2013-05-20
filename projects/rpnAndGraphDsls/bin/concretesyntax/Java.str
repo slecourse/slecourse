@@ -1,0 +1,104 @@
+module concretesyntax/Java
+
+ imports org/sugarj/java/init/InitTrans org/sugarj/languages/Java org/sugarj/languages/Stratego concretesyntax/MetaExplode
+
+
+signature
+  constructors
+    ToMetaExpr : JavaType() -> StrategoTerm()
+    ToMetaExpr : JavaType() -> StrategoTerm()
+    ToMetaExpr : JavaType() -> StrategoTerm()
+
+
+signature
+  constructors
+    FromMetaExpr : StrategoTerm() -> JavaType()
+    FromMetaExpr : StrategoTerm() -> JavaType()
+    FromMetaExpr : StrategoTerm() -> JavaArrayBaseType()
+    FromMetaExpr : StrategoTerm() -> JavaArrayBaseType()
+    FromMetaExpr : StrategoTerm() -> JavaRefType()
+    FromMetaExpr : StrategoTerm() -> JavaRefType()
+
+
+signature
+  constructors
+    ToMetaExpr : JavaFormalParam() -> StrategoTerm()
+    ToMetaExpr : iter-star-sep() -> StrategoTerm()
+    ToMetaExpr : JavaFormalParam() -> StrategoTerm()
+    ToMetaExpr : JavaFormalParam() -> StrategoTerm()
+    ToMetaExpr : JavaFormalParam() -> StrategoTerm()
+    ToMetaExpr : iter-star-sep() -> StrategoTerm()
+    ToMetaExpr : iter-star-sep() -> StrategoTerm()
+    ToMetaExpr : iter-star-sep() -> StrategoTerm()
+
+
+signature
+  constructors
+    FromMetaExpr : StrategoTerm() -> JavaFormalParam()
+    FromMetaExpr : StrategoTerm() -> iter-star-sep()
+
+
+signature
+  constructors
+    ToMetaExpr : JavaPackageDec() -> StrategoTerm()
+    ToMetaExpr : JavaPackageDec() -> StrategoTerm()
+    ToMetaExpr : opt() -> StrategoTerm()
+
+
+signature
+  constructors
+    FromMetaExpr : StrategoTerm() -> JavaPackageDec()
+    FromMetaExpr : StrategoTerm() -> opt()
+
+
+signature
+  constructors
+    ToMetaExpr     : JavaImportDec() -> StrategoTerm()
+    ToMetaExpr     : JavaImportDec() -> StrategoTerm()
+    ToMetaListExpr : iter-star() -> StrategoTerm()
+
+
+signature
+  constructors
+    FromMetaExpr : StrategoTerm() -> JavaImportDec()
+    FromMetaExpr : StrategoTerm() -> iter-star()
+
+
+signature
+  constructors
+    FromMetaExpr : cfStrategoTerm() -> JavaStringChars()
+    FromMetaExpr : cfStrategoTerm() -> JavaSingleChar()
+    FromMetaExpr : cfStrategoTerm() -> JavaStringChars()
+    FromMetaExpr : cfStrategoTerm() -> JavaSingleChar()
+
+
+signature
+  constructors
+    ToMetaExpr : JavaMethodDec() -> StrategoTerm()
+    ToMetaExpr : JavaMethodDec() -> StrategoTerm()
+    ToMetaExpr : JavaMethodDec() -> StrategoTerm()
+
+
+strategies
+  java-char-expr =
+    java-char-expr-meta <+ java-char-expr-plain
+
+  java-string-expr =
+    java-string-expr-meta <+ java-string-expr-plain
+
+
+rules
+
+  java-char-expr-meta :
+    FromMetaExpr(e) -> e
+
+  java-char-expr-plain :
+    c -> Lit(Char(Single(c)))
+
+  java-string-expr-meta :
+    FromMetaExpr(e) -> e
+
+  java-string-expr-plain :
+    s -> Lit(
+           String([Chars(s)])
+         )

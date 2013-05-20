@@ -1,0 +1,17 @@
+module concretesyntax/MetaListVarTest
+
+ imports org/sugarj/java/init/InitTrans concretesyntax/Java
+
+
+rules
+
+  foo1 :
+    Block([]) -> ""
+
+  foo2 :
+    Block(
+      [Var(ListVar("bstm*"))]
+    ) -> ""
+
+  foo3 :
+    Block([bstms]) -> ""

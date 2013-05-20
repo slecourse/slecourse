@@ -1,0 +1,35 @@
+module concretesyntax/TestAux
+
+ imports org/sugarj/java/init/InitTrans concretesyntax/Java
+
+
+strategies
+  desugar =
+    changed-tree(javaDistributeMul)
+
+
+rules
+
+  javaDistributeMul :
+    Mul(java_e1, Plus(java_e2, java_e3)) -> Plus(
+                                              Mul(java_e1, java_e2)
+                                            , Mul(java_e1, java_e3)
+                                            )
+
+  javaDistributeMul :
+    Mul(java_e1, Minus(java_e2, java_e3)) -> Minus(
+                                               Mul(java_e1, java_e2)
+                                             , Mul(java_e1, java_e3)
+                                             )
+
+  javaDistributeMul :
+    Mul(Plus(java_e1, java_e2), java_e3) -> Plus(
+                                              Mul(java_e1, java_e3)
+                                            , Mul(java_e2, java_e3)
+                                            )
+
+  javaDistributeMul :
+    Mul(Minus(java_e1, java_e2), java_e3) -> Minus(
+                                               Mul(java_e1, java_e3)
+                                             , Mul(java_e2, java_e3)
+                                             )

@@ -1,0 +1,73 @@
+module graphdsl/Sugar
+
+ imports org/sugarj/java/init/InitTrans org/sugarj/languages/Java concretesyntax/Java
+
+
+signature
+  constructors
+    GraphCons     : JavaExpr()
+    GraphDecl     : JavaStm() * JavaExpr() -> JavaStm()
+    GraphDef      : JavaId() -> JavaStm()
+    GraphDef      : JavaId() * GraphEdges() -> JavaStm()
+    GraphEdge     : JavaId() * JavaId() -> GraphEdge()
+    GraphEdges    : GraphEdge() * GraphEdges() -> GraphEdges()
+    GraphEdges    : GraphEdge() * GraphEdges() -> GraphEdges()
+    GraphAddEdges : JavaExpr() * GraphEdges() -> JavaExpr()
+
+
+strategies
+  desugar =
+    changed-tree(desugaring-graph)
+
+
+rules
+
+  desugaring-graph :
+    GraphDef(name) -> GraphDecl(name, GraphCons)
+
+  desugaring-graph :
+    GraphDef(name, edges) -> GraphDecl(name, GraphAddEdges(GraphCons, edges))
+
+  desugaring-graph :
+    GraphAddEdges(g, GraphEdges(edge, edges)) -> GraphAddEdges(GraphAddEdges(g, edge), edges)
+
+  desugaring-graph :
+    GraphAddEdges(g, GraphEdge(a, b)) -> Invoke(
+                                           Method(
+                                             g
+                                           , None()
+                                           , Id("addEdge")
+                                           )
+                                         , [ Lit(String([a]))
+                                           , Lit(String([b]))
+                                           ]
+                                         )
+
+  desugaring-graph :
+    GraphDecl(name, graph) -> LocalVarDecStm(
+                                LocalVarDec(
+                                  []
+                                , ClassOrInterfaceType(
+                                    TypeName(
+                                      PackageOrTypeName(Id("graphdsl"))
+                                    , Id("Graph")
+                                    )
+                                  , None()
+                                  )
+                                , [VarDec(name, graph)]
+                                )
+                              )
+
+  desugaring-graph :
+    GraphCons -> NewInstance(
+                   None()
+                 , ClassOrInterfaceType(
+                     TypeName(
+                       PackageOrTypeName(Id("graphdsl"))
+                     , Id("Graph")
+                     )
+                   , None()
+                   )
+                 , []
+                 , None()
+                 )

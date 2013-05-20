@@ -1,0 +1,34 @@
+package reversepolish;
+
+import org.sugarj.languages.Java;
+import concretesyntax.Java;
+ 
+public sugar Sugar {
+  
+  context-free syntax
+    "rp>" RPExpr         -> JavaExpr
+    "(" JavaExpr ")"     -> RPExpr
+    JavaLiteral          -> RPExpr
+    JavaExprName         -> RPExpr
+    JavaMethodSpec "(" {JavaExpr ","}* ")" -> RPExpr {cons("Invoke")}
+    RPExpr RPExpr "+"    -> RPExpr {cons("Plus")}
+    RPExpr RPExpr "-"    -> RPExpr {cons("Minus")}
+    RPExpr RPExpr "*"    -> RPExpr {cons("Mul")}
+    RPExpr RPExpr "/"    -> RPExpr {cons("Div")}
+    RPExpr RPExpr "%"    -> RPExpr {cons("Remain")}
+    RPExpr RPExpr "<<"   -> RPExpr {cons("LeftShift")}
+    RPExpr RPExpr ">>"   -> RPExpr {cons("RightShift")}
+    RPExpr RPExpr ">>>"  -> RPExpr {cons("URightShift")}
+    RPExpr RPExpr "<"    -> RPExpr {cons("Lt")}
+    RPExpr RPExpr ">"    -> RPExpr {cons("Gt")}
+    RPExpr RPExpr "<="   -> RPExpr {cons("LtEq")}
+    RPExpr RPExpr ">="   -> RPExpr {cons("GtEq")}
+    RPExpr RPExpr "=="   -> RPExpr {cons("Eq")}
+    RPExpr RPExpr "!="   -> RPExpr {cons("NotEq")}
+    RPExpr RPExpr "&&"   -> RPExpr {cons("LazyAnd")}
+    RPExpr RPExpr "||"   -> RPExpr {cons("LazyOr")}
+    RPExpr RPExpr "&"    -> RPExpr {cons("And")}
+    RPExpr RPExpr "^"    -> RPExpr {cons("ExcOr")}
+    RPExpr RPExpr "|"    -> RPExpr {cons("Or")}
+
+}

@@ -1,8 +1,8 @@
 This example illustrates the usage of converge to implement a small DSL.
 
-The DSL is called Query and is able to perform simple queries on lists.
+The DSL is called Query and it supports simple queries on lists.
 
-For an example of this dsl, refer to "query_exec.cv"
+For an example of DSL code, refer to "query_exec.cv"
 
 Run the code like this:
 

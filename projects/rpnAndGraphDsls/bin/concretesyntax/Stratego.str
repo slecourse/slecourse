@@ -1,0 +1,27 @@
+module concretesyntax/Stratego
+
+ imports org/sugarj/java/init/InitTrans org/sugarj/languages/Stratego concretesyntax/MetaExplode
+
+
+signature
+  constructors
+    ToMetaExpr : StrategoDecl() -> StrategoTerm()
+    ToMetaExpr : StrategoDecl() -> StrategoTerm()
+    ToMetaExpr : StrategoDecl() -> StrategoTerm()
+    ToMetaExpr : StrategoStrategy() -> StrategoTerm()
+    ToMetaExpr : StrategoStrategy() -> StrategoTerm()
+    ToMetaExpr : StrategoStrategy() -> StrategoTerm()
+    ToMetaExpr : StrategoTerm() -> StrategoTerm()
+    ToMetaExpr : StrategoTerm() -> StrategoTerm()
+    ToMetaExpr : StrategoTerm() -> StrategoTerm()
+
+
+signature
+  constructors
+    FromMetaExpr : StrategoTerm() -> StrategoTerm()
+    FromMetaExpr : StrategoTerm() -> StrategoTerm()
+    FromMetaExpr : StrategoTerm() -> StrategoId()
+    FromMetaExpr : StrategoTerm() -> StrategoId()
+    FromMetaExpr : StrategoTerm() -> StrategoStrategy()
+    FromMetaExpr : StrategoTerm() -> StrategoStrategy()
+    FromMetaExpr : StrategoTerm() -> StrategoString()

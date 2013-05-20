@@ -1,0 +1,12 @@
+package graphdsl;
+
+import graphdsl.Sugar;
+
+public checks Checks {
+  errors 
+    GraphEdge(a,b) = 
+    [(a, "edge references itself"),
+     (b, "edge references itself")]
+    where <equal> (a, b)
+}
+

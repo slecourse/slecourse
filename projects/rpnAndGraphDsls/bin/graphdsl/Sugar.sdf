@@ -1,0 +1,14 @@
+module graphdsl/Sugar
+ imports org/sugarj/java/init/initGrammar concretesyntax/Java
+exports 
+  (/)
+context-free syntax
+                                    -> JavaExpr   {cons("GraphCons"), reject}
+  JavaStm JavaExpr                  -> JavaStm    {cons("GraphDecl"), reject}
+  "Graph" JavaId "{" "}"            -> JavaStm    {cons("GraphDef")}
+  "Graph" JavaId "{" GraphEdges "}" -> JavaStm    {cons("GraphDef")}
+  JavaId "->" JavaId                -> GraphEdge  {cons("GraphEdge")}
+  GraphEdge                         -> GraphEdges 
+  GraphEdge GraphEdges              -> GraphEdges {cons("GraphEdges")}
+  GraphEdge "," GraphEdges          -> GraphEdges {cons("GraphEdges")}
+  JavaExpr "+>" GraphEdges          -> JavaExpr   {cons("GraphAddEdges")}
