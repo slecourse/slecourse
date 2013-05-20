@@ -1,0 +1,41 @@
+import Maths, Builtins, CEI, CPK::Earley::DSL, CPK::Traverser, Exceptions, Strings, Sys
+
+parse := $<<DSL::mk_parser("cal", ["wake", "move"], [])>>:
+    cal ::= wake | move
+    
+    move ::= "MOVE" time time
+    
+    wake ::= "WAKE" time
+    
+    time ::= "INT"
+    
+class CalTranslator(Traverser::Strict_Traverser):
+
+    func generate(self, node):
+        return self._preorder(node)
+        
+    func _t_cal(self, node):
+        return self._preorder(node[0])
+        
+    func _t_wake(self, node):
+        val := self._preorder(node[1])
+        return [<node.src_infos>| Sys::println('wake at ' + ${val}) |]
+        
+    func _t_move(self, node):
+        val := self._preorder(node[1])
+        val2 := self._preorder(node[2])
+        return [<node.src_infos>| Sys::println('move ' + ${val} + ' to ' + ${val}) |] 
+
+    func _t_time(self, node):
+        return CEI::lift(node[0].value, node.src_infos)
+    
+func cal(dsl_block, src_infos):
+    parse_tree := parse(dsl_block, src_infos)
+    
+    it := CalTranslator.new().generate(parse_tree)
+    
+    Sys::println(CEI::pp_itree(it))
+    
+    return it
+    
+    

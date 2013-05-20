@@ -1,0 +1,14 @@
+import query, Sys
+
+func main():
+
+    y := [1, 2, 3, 4, 5]
+    // make sure to use $c<<...>> instead of $<<...>> to prevent name mangling and to make sure that variables
+    // from outside this function work
+    q := $c<<query::query>>:
+        for q in y 
+        where q > 3 
+        select q + 1
+    Sys::println(q)
+    
+

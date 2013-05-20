@@ -1,0 +1,150 @@
+import Maths, Builtins, CEI, CPK::Earley::DSL, CPK::Traverser, Exceptions, Strings, Sys
+
+// this is the parsing function, its grammar is written in a dsl
+// http://convergepl.org/documentation/2.0/modules_html/CPK.Earley.DSL.html
+parse := $<<DSL::mk_parser("query", ["in", "select", "for", "where"], [])>>:
+    
+    query ::= for (where)* select
+    
+    for ::= "FOR" "ID" "IN" "ID" ("NEWLINE")*
+    
+    where ::= "WHERE" expr ("NEWLINE")*
+    
+    select ::= "SELECT" expr ("NEWLINE")*
+    
+    expr ::= expr "==" expr
+        | expr "/=" expr
+        | expr "<" expr
+        | expr ">" expr
+        | expr "<=" expr
+        | expr ">=" expr
+        | arithmetic
+        
+    arithmetic ::= arithmetic "+" arithmetic %precedence 5
+        | arithmetic "-" arithmetic %precedence 5
+        | arithmetic "*" arithmetic %precedence 10
+        | arithmetic "/" arithmetic %precedence 7
+        | call
+        | const
+        
+    call ::= "ID" "(" args ")"
+    
+    args ::= arithmetic ( "," arithmetic )*
+    
+    const ::= "INT" | "STRING" | "ID"
+
+class QueryTranslator(Traverser::Strict_Traverser):
+    // there is a function for every node that has the form _t_{name_of_ast} that is used to generate an ast
+    
+    func generate(self, node):
+        return self._preorder(node)
+  
+    func _t_for(self, node):
+        return Dict{"name" : CEI::ivar(node[1].value, node[1].src_infos), "list" : CEI::ivar(node[3].value, node[3].src_infos)}
+        
+    func _t_where(self, node):
+        return self._preorder(node[1])
+        
+    func _t_expr(self, node):
+        if node.len() == 1:
+            return self._preorder(node[0])
+    
+        left := self._preorder(node[0])
+        op := node[1]
+        right := self._preorder(node[2])
+        
+        ndif op.type == "==":
+            return [<node.src_infos>| $c{left} == $c{right} |]
+        elif op.type == "/=":
+            return [<node.src_infos>| $c{left} != $c{right} |]
+        elif op.type == "<":
+            return [<node.src_infos>| $c{left} < $c{right} |]
+        elif op.type == "<=":
+            return [<node.src_infos>| $c{left} <= $c{right} |]
+        elif op.type == ">=":
+            return [<node.src_infos>| $c{left} >= $c{right} |]
+        elif op.type == ">":
+            return [<node.src_infos>| $c{left} > $c{right} |]
+        
+    func _t_arithmetic(self, node):
+        if node.len() == 1:
+            return self._preorder(node[0])
+        
+        left := self._preorder(node[0])
+        op := node[1]
+        right := self._preorder(node[2])
+        
+        ndif op.type == "+":
+            return [<node.src_infos>| $c{left} + $c{right} |]
+        elif op.type == "-":
+            return [<node.src_infos>| $c{left} - $c{right} |]
+        elif op.type == "/":
+            return [<node.src_infos>| $c{left} / $c{right} |]
+        elif op.type == "*":
+            return [<node.src_infos>| $c{left} * $c{right} |]
+        
+    func _t_const(self, node):
+        ndif node[0].type == "INT":
+            return CEI::lift(Builtins::Int.new(node[0].value, node.src_infos))
+        elif node[0].type == "STRING":
+            return CEI::lift(node[0].value, node.src_infos)
+        elif node[0].type == "ID":
+            return CEI::ivar(node[0].value, node[0].src_infos)
+    
+    func _t_query(self, node):
+
+        // query ::= (from)+ (where)* select
+        
+        names := []
+        params := []
+        
+        wheres := []
+        
+        select := 0
+        
+        for f := node.iter():
+            ndif f.name == "for":
+                t := self._preorder(f)
+                names.append(t["name"])
+                params.append(t["list"])
+            
+            elif f.name == "select":
+                select := self._preorder(f[1])
+            
+            elif f.name == "where":
+                t := self._preorder(f[1])
+                wheres.append(t)      
+        
+        w := wheres[0]
+        for i := 1.iter_to(wheres.len()):
+            w := [| $c{w} & $c{wheres[i]} |]
+
+        name := names[0]
+        // this is the main result, we can ommit name mangling because the closure create its own namespace
+        return [|
+            func () {
+                r := []
+                for $c{name} := $c{params[0]}.iter():
+                    if $c{w}:
+                        r.append($c{select})
+                return r
+            }()
+        |]
+
+func query(dsl_block, src_infos):
+    // dsl_block: the source of the dsl as a string
+    // src_infos: line numbers and columns
+    // result: converge ast
+    // this is the main function of this dsl
+    parse_tree := parse(dsl_block, src_infos)
+    
+    it := QueryTranslator.new().generate(parse_tree)
+    
+    // Sys::println(CEI::pp_itree(it))
+    
+    return it
+    
+    
+    
+    
+     

@@ -1,0 +1,7 @@
+import cal, Sys
+
+func main():
+    $<<cal::cal>>:
+        wake 10
+
+
