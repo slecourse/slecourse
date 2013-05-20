@@ -1,0 +1,47 @@
+module annotate
+
+imports
+  libstratego-lib
+  libstratego-gpp
+  libstratego-aterm
+  include/MicroJava
+  microjava
+  lib/editor-common.generated
+  utils
+  check
+
+rules
+  // annotate all reference cascades with types (where they can be resolved)
+  annotate:
+	Class(cn,ms) -> Class(cn,ms)
+	with
+		fs := <map(\Field(x) -> x\)> <filter(?Field(_))> ms;
+		rules (
+			annotate:
+			  Method(mn,ps,t,ss) -> Method(mn,ps,t,newss) 
+			  with
+				nts-assoc := <concat> [<map(unpack-nt)> ps, <map(unpack-nt)> fs,[("this",ClassType(cn))]];
+				newss := <Fst> <foldr(!([],nts-assoc), (add-nt <+ ann-step))> <reverse> ss
+
+			add-nt:
+          	  (s@Declare(n,t),(ss,nts)) -> (<concat> [ss,[s]], <concat> [[(n,t)],nts])
+
+			ann-step:
+          	  (s,(ss,nts)) -> (<concat> [ss,[news]], nts)
+          	  with
+            	news := <topdown(try(annote-cas(|nts)))> s
+			
+	        // fix references in cascade
+	        annote-cas(|nts):
+	          x@RefCascade([ref|refs]) ->  RefCascade([ref|refs]) {<concat> [[st], annos]}
+	            where
+					<lookup> (ref,nts) => st;
+					fold := <foldr(!([],st), cas-step)> <reverse> refs;
+					annos := <Fst> fold
+	                
+			// replacing step
+	        cas-step:
+	            (ref, (annos,ClassType(t))) -> (<concat> [annos, [ct']], ct')
+	            where
+					<lookup> (ref, <index> (1, <bagof-GetFields> t)) => ct'
+		)

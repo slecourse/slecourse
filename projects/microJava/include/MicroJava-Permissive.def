@@ -1,0 +1,114 @@
+
+definition
+
+module Common
+exports
+  sorts WATER WATERTOKEN WATERTOKENSTART WATERTOKENSEPARATOR WATERTOKENSTAR
+
+  lexical syntax
+    ~[A-Za-z0-9\_]                 -> WATERTOKENSTART     {recover, avoid}
+    WATERTOKENSTART [A-Za-z0-9\_]* -> WATERTOKEN          
+    ~[A-Za-z0-9\_\ \t\12\r\n\*]    -> WATERTOKENSEPARATOR {recover, avoid}
+    "*"                            -> WATERTOKENSTAR      {recover, avoid}
+    WATERTOKEN                     -> WATER               
+    WATERTOKENSEPARATOR            -> WATER               
+    WATERTOKENSTAR                 -> WATER               
+                                   -> WATEREOF            
+
+  lexical restrictions
+    WATERTOKEN -/- [A-Za-z0-9\_]
+    WATERTOKENSTAR -/- [\/]
+
+  context-free syntax
+    WATER -> LAYOUT {cons("WATER")}
+
+  (
+
+  sorts WATEREOF
+
+  lexical restrictions
+    WATEREOF -/- ~[]
+
+  lexical syntax
+    %% Lexical insertion recovery rules                              
+    "\""                                          -> INSERTOPENQUOTE {recover}
+    INSERTOPENQUOTE StringChar* "\n"              -> STRING          {cons("INSERTEND")}
+    INSERTOPENQUOTE StringChar* WATEREOF          -> STRING          {cons("INSERTEND")}
+    "/*"                                          -> INSERTSTART     {recover}
+    INSERTSTART ( ~[\*] | CommentChar )* WATEREOF -> LAYOUT          {cons("INSERTEND")}
+                                                  -> "module"        {recover, cons("INSERTION")}
+                                                  -> "{"             {recover, cons("INSERTION")}
+                                                  -> "}"             {recover, cons("INSERTION")}
+                                                  -> "class"         {recover, cons("INSERTION")}
+                                                  -> ";"             {recover, cons("INSERTION")}
+                                                  -> "var"           {recover, cons("INSERTION")}
+                                                  -> "return"        {recover, cons("INSERTION")}
+                                                  -> ","             {recover, cons("INSERTION")}
+                                                  -> "()"            {recover, cons("INSERTION")}
+                                                  -> "."             {recover, cons("INSERTION")}
+
+  syntax
+    %% Kernel syntax insertion recovery rules   
+
+  )
+
+  (
+
+  lexical syntax
+    [a-z] [a-zA-Z0-9]*                 -> LCID          
+    [A-Z] [a-zA-Z0-9]*                 -> UCID          
+    [a-zA-Z] [a-zA-Z0-9]*              -> ID            
+    "-"? [0-9]+                        -> INT           
+    "\"" StringChar* "\""              -> STRING        
+    ~[\"\n]                            -> StringChar    
+    "\\\""                             -> StringChar    
+    BackSlashChar                      -> StringChar    
+    "\\"                               -> BackSlashChar 
+    [\ \t\n\r]                         -> LAYOUT        
+    [\*]                               -> CommentChar   
+    "/*" ( ~[\*] | CommentChar )* "*/" -> LAYOUT        
+    "//" ~[\n\r]* [\n\r] | EOF         -> LAYOUT        
+                                       -> EOF           
+
+  lexical restrictions
+    CommentChar -/- [\/]
+    INT -/- [0-9]
+    LCID -/- [a-zA-Z0-9\_]
+    UCID -/- [A-zA-Z0-9\_]
+    ID -/- [A-zA-Z0-9\_]
+    EOF -/- ~[]
+    BackSlashChar -/- [\"]
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n\r]
+    LAYOUT? -/- [\/] . [\/]
+    LAYOUT? -/- [\/] . [\*]
+
+  )
+
+module MicroJava
+imports Common
+
+exports
+  context-free start-symbols
+    Start
+
+  context-free syntax
+    "module" UCID "{" Class* "}"                              -> Start      {cons("Module")}
+    "class" ID "{" Member* "}"                                -> Class      {cons("Class")}
+    NTBinding                                                 -> Member     {cons("Field")}
+    ID "(" {NTBinding ","}* ")" ":" Type "{" ( Stm ";" )* "}" -> Member     {cons("Method")}
+    "var" ID ":" Type                                         -> Stm        {cons("Declare")}
+    RefCascade "=" Expr                                       -> Stm        {cons("Assign")}
+    "return" Expr                                             -> Stm        {cons("Return")}
+    RefCascade "." ID "(" {Expr ","}* ")"                     -> Expr       {cons("Call")}
+    RefCascade                                                -> Expr       {cons("Id")}
+    "new" UCID "()"                                           -> Expr       {cons("New")}
+    INT                                                       -> Expr       {cons("NatConst")}
+    Expr "+" Expr                                             -> Expr       {cons("Add"), assoc}
+    Expr "-" Expr                                             -> Expr       {cons("Sub"), left}
+    Expr "*" Expr                                             -> Expr       {cons("Mul"), assoc}
+    ID ":" Type                                               -> NTBinding  {cons("NT")}
+    "nat"                                                     -> Type       {cons("NatType")}
+    UCID                                                      -> Type       {cons("ClassType")}
+    {ID "."}+                                                 -> RefCascade {cons("RefCascade")}

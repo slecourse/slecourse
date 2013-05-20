@@ -1,0 +1,53 @@
+module MyModule {
+	
+	// object in space 
+	class Object3D {
+		
+		height: nat
+		width: nat
+		x: nat
+		y: nat
+		z: nat
+		neighbor: Object3D
+		
+		implode(r : Object3D): Object3D {
+			this.x = this.neighbor.x - 10;
+			this.y = -1000;
+			this.z = -1000;
+			this.height = 0;
+			this.width = 0;
+		}
+		
+		move (s: nat): Object3D {
+			this.x = this.x * s;
+			this.y = this.y * s;
+			this.z = this.z * s;
+			return this;
+		}
+			
+		copy3D (): Object3D {
+			var res: Object3D;
+			res.x = this.x;
+			res.y = this.y;
+			res.z = this.z;
+			return res;
+		}
+		
+	}
+	
+	// cats
+	class Cat {
+		o: Object3D
+		lives: nat
+		
+		climb (d: nat): Object3D {
+			this.o.y = this.o.y + d;
+			return this.o.copy3D(); 				
+		}	
+		
+		getCaughtByDog (): Cat {
+			this.lives = this.lives - 1;
+		}
+	}
+	
+}

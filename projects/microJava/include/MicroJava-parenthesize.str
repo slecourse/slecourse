@@ -1,0 +1,34 @@
+module include/MicroJava-parenthesize
+
+imports
+  libstratego-lib
+  include/MicroJava
+
+
+strategies
+  io-MicroJava-parenthesize =
+    io-wrap(parenthesize-MicroJava)
+
+  parenthesize-MicroJava =
+    innermost(MicroJavaParenthesize)
+
+
+rules
+
+  MicroJavaParenthesize :
+    Mul(t_0, t_1) -> Mul(t_0, Parenthetical(t_1))
+    where <(?Mul(_, _) + fail)> t_1
+
+  MicroJavaParenthesize :
+    Sub(t_0, t_1) -> Sub(t_0, Parenthetical(t_1))
+    where <(?Sub(_, _) + fail)> t_1
+
+  MicroJavaParenthesize :
+    Add(t_0, t_1) -> Add(t_0, Parenthetical(t_1))
+    where <(?Add(_, _) + fail)> t_1
+
+
+signature
+  constructors
+    Parenthetical : Unknown -> Unknown
+

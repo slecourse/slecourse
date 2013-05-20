@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?eclipse version="3.0"?>
+
+<plugin>
+       <extension point="org.eclipse.imp.runtime.languageDescription">
+          <language extensions="mj" description="MicroJava" language="MicroJava" derivedFrom="DynamicRoot" validator="MicroJava.MicroJavaValidator" validatorClass="MicroJava.MicroJavaValidator"></language>
+       </extension>
+       <extension id="MicroJava.parser" name="MicroJava Parser" point="org.eclipse.imp.runtime.parser">
+          <parser class="MicroJava.MicroJavaParseController" language="MicroJava">
+          </parser>
+       </extension>    
+    </plugin>

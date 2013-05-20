@@ -1,0 +1,51 @@
+%% Grammar for the MircoJava language
+%% By default, based on an example "entities" syntax
+module MicroJava
+
+imports Common
+
+exports
+
+  context-free start-symbols
+    Start
+
+  context-free syntax
+  	
+	%% programs
+    "module" UCID "{" Class* "}"    	  		-> Start {cons("Module")}
+
+	%% classes
+	"class" ID "{" Member* "}" 					-> Class {cons("Class")}
+
+	%% fields
+	NTBinding									-> Member {cons("Field")}
+
+	%% methods
+	ID "(" {NTBinding "," }* ")" ":" Type "{" (Stm ";")* "}"	-> Member{cons("Method")}
+	
+	%% statements
+    "var" ID ":" Type 							-> Stm {cons("Declare")}
+	RefCascade "=" Expr 						-> Stm {cons("Assign")}
+	"return" Expr 								-> Stm {cons("Return")}
+	
+	%% expressions
+	RefCascade "." ID "(" {Expr ","}* ")"		-> Expr {cons("Call")}
+	RefCascade 									-> Expr {cons("Id")}
+	"new" UCID "()"								-> Expr {cons("New")}
+	INT 										-> Expr {cons("NatConst")}
+	Expr "+" Expr								-> Expr {cons("Add"), assoc}
+	Expr "-" Expr								-> Expr {cons("Sub"), left}
+	Expr "*" Expr								-> Expr {cons("Mul"), assoc}
+
+	%% name-type bindings
+	ID ":" Type                   				-> NTBinding {cons("NT")}
+
+	%% types
+	"nat"										-> Type {cons("NatType")}
+    UCID                            			-> Type {cons("ClassType")}
+
+	%% reference cascades
+	{ID "."}+ 									-> RefCascade {cons("RefCascade")}
+	
+	
+	

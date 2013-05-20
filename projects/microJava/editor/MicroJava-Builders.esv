@@ -1,0 +1,37 @@
+module MicroJava-Builders
+
+imports MicroJava-Builders.generated
+
+builders
+                                                                                   
+  // This file can be used for custom analysis, builder and refactoring rules.     
+  //                                                                               
+  // See the imported file for a brief introduction and examples.                  
+
+builders
+                                                                                                              
+  provider : include/microjava.ctree                                                                          
+  provider : include/microjava-java.jar                                                                       
+                                                                                                              
+  observer : editor-analyze                                                                                   
+                                                                                                              
+  builder  : "Generate Java code (for selection)"   = generate-java (openeditor) (realtime)                   
+  builder  : "Show abstract syntax (for selection)" = generate-aterm (openeditor) (realtime) (meta) (source)  
+                                                                                                              
+
+refactorings
+
+  pretty-print : pp-microjava-string
+
+  refactoring ID : "Rename class" = rename-class (source) (cursor)
+    input
+      identifier : "New class name" = ""
+
+
+  refactoring Member* : "Extract members to class" = extract-class (source) (cursor)
+    input
+      identifier : "Name of new class" = ""
+
+
+
+  // on save: generate-java

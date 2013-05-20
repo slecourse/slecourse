@@ -1,0 +1,21 @@
+module utils
+
+imports
+  libstratego-lib
+  libstratego-gpp
+  include/MicroJava
+  libstratego-aterm
+  utils
+
+rules
+  unpack-nt:
+	NT(n,t) -> (n,t)
+
+  unpack-nt-n:
+	NT(n,t) -> n
+ 
+  get-field-names:
+	ms -> <map(\Field(NT(n,t)) -> n\)> <filter(?Field(_))> ms
+
+  get-method-names:
+	ms -> <map(\Method(mn, _, t, _) -> mn\)> <filter(?Method(_,_,_,_))> ms

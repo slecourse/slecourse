@@ -1,0 +1,49 @@
+module check
+
+imports
+  libstratego-lib
+  include/MicroJava
+  lib/editor-common.generated
+  utils
+  annotate
+
+rules
+
+  // Analysis: does a topdown traversal of the tree,
+  analyze:
+    t -> t
+    with
+      <topdown(try(record-entity))> t
+
+  // Records the definition of an class and it's fields in a dynamic rule
+  record-entity:
+    Class(x, m*) -> Class(x, m*)
+    with
+      rules(
+        GetClass :+ x -> x
+		GetFields :+ x -> <map(\Field(x) -> <unpack-nt> x\)> <filter(?Field(_))> m*
+		GetMethods :+ x -> <filter(?Method(_,_,_,_))> m*
+      )
+
+rules
+    
+  // Check for unresolved class names
+  constraint-error:
+    ClassType(cn) -> (cn, $[Class name "[cn]" could not be resolved.])
+    where
+      <bagof-GetClass> cn => []
+
+  constraint-error:
+    New(cn) -> (cn, $[Class name "[cn]" could not be resolved.])
+    where
+      <bagof-GetClass> cn => []
+
+  // Check for duplicate class names
+  constraint-error:
+    Class(x, _) -> (x, $[Duplicate class name "[x]".])
+    where
+      not(<bagof-GetClass> x => [_])
+  
+  // Check for empty classes
+  constraint-warning:
+    Class(cn,[]) -> (cn, $[Class [cn] has no members])

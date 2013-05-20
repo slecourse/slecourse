@@ -1,0 +1,69 @@
+module classExtraction
+
+imports
+  lib/refactor-common.generated
+  include/MicroJava
+  lib/editor-common.generated  
+  microjava
+  classRenaming
+  utils
+  check
+  annotate
+
+rules
+ 
+  // rules for extracting fields to a new class
+  extract-class:
+    (new-cn, selected-ms, pos, ast@Module(mn,csraw), path, _) -> ([(ast, Module(mn,cs'''))], [], [], [])
+    with
+	  cs := <topdown(try(annotate))> csraw;
+      // lookup target class 
+      parentClassIndex := <index> (2, pos);
+	  Class(cn, old-ms) := <index> (<inc> parentClassIndex, cs);
+	  // new members
+	  diff-ms := <diff(\(a,b) -> <eq> (<topdown(try(rm-annotations))> a, b)\)> (old-ms, selected-ms);
+	  selected-meths := <filter(?Method(_,_,_,_))> selected-ms;
+	  delegators := <map(\Method(mn,ps,t,_) -> Method(mn,ps,t,[Return(Call(RefCascade(["this", <lower-case> new-cn]),mn,<map(unpack-nt-n)> ps))])\)> selected-meths; 
+	  ms' := <concat> [[Field(NT(<lower-case> new-cn, ClassType(new-cn)))], diff-ms, delegators];
+	  // create new class
+	  new-class := Class(new-cn, <concat> [[Field(NT(<lower-case> cn, ClassType(cn)))], <topdown(try(replace-this(|cn, ms')))> selected-ms]);
+      // add new class with target members and backlink to old
+      cs'   := <concat> [cs, [<topdown(try(annotate))> new-class]];
+      // replace fields by class reference
+      cs''  := <at-index(\x -> Class(cn, ms')\)> (parentClassIndex, cs');
+      // fix references in classes
+      cs''' := <topdown(try(replace-cas-call(|new-cn, selected-ms, cn)))> cs''
+
+  // fix cascades	
+  replace-cas-call(|new-cn, selected-ms, cn):
+	RefCascade(refs@[h|t]) {types} -> RefCascade(refs') {types'}
+	where
+	  selected-fs := <get-field-names> selected-ms;
+	  accesses := <zip> (<init> types, t);
+	  candidates := <filter(\(c,field) -> <and(<eq> (c, ClassType(cn)), <member> (field, selected-fs))>\)> accesses;
+      refs' := <foldr(!refs, (\(c,rs) -> <insert> (<get-index> (c, accesses), <lower-case> new-cn, rs)\))> candidates;
+      types' := <foldr(!types, (\(c,rs) -> <insert> (<get-index> (c, accesses), ClassType(new-cn), rs)\))> candidates
+
+  // fix calls
+  replace-cas-call(|new-cn, selected-ms, cn):
+	Call(RefCascade(refs) {types}, mn, es) -> Call(RefCascade(refs') {types'}, mn, es)
+	where
+	  selected-meths := <get-method-names> selected-ms;
+	  <eq> (ClassType(cn), <last> types);
+	  <member> (mn, selected-meths);
+	  refs' := <insert> (<length> refs, <lower-case> new-cn, refs);
+	  types' := <insert> (<length> types, ClassType(new-cn), types)
+	
+  // fix "this" references in cascades
+  replace-this(|oldname, old-ms):
+	RefCascade(["this",ref|refs]) -> RefCascade(["this", <lower-case> oldname,ref|refs])
+	where
+	  old-fs := <get-field-names> old-ms;
+	  <member> (ref,old-fs)
+
+  // fix "this" references in calls
+  replace-this(|oldname, old-ms):
+	Call(RefCascade(["this"]), mn, es) -> Call(RefCascade(["this", <lower-case> oldname]), mn, es)
+	where
+	  old-meths := <get-method-names> old-ms;
+	  <member> (mn,old-meths)

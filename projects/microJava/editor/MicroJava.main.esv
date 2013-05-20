@@ -1,0 +1,16 @@
+module MicroJava.main
+
+imports MicroJava-Builders MicroJava-Colorer MicroJava-Completions MicroJava-Folding MicroJava-Outliner MicroJava-References MicroJava-Syntax
+
+language General properties
+                  
+  name          : MicroJava
+  id            : MicroJava
+  extends       : Root
+                  
+  description   : "Spoofax/IMP-generated editor for the MicroJava language"
+  url           : http://strategoxt.org
+                  
+  extensions    : mj
+  table         : include/MicroJava.tbl
+  start symbols : Start

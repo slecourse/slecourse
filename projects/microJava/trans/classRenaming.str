@@ -1,0 +1,23 @@
+module classRenaming
+
+imports
+  lib/refactor-common.generated
+  include/MicroJava
+  lib/editor-common.generated  
+  microjava
+  utils
+
+rules
+ 
+  // rules for class renaming
+  rename-class:
+    (newname, selected-name, position, ast@Module(mn,csold), path, project-path) -> (Module(mn, csnew), fatal-errors, errors, warnings)
+    with
+      csnew := <topdown(try(rename-classstep(|selected-name, newname)))> csold; 
+      (fatal-errors,errors, warnings) := ([], [], [])
+
+  rename-classstep(|old-name, new-name):
+    ClassType(old-name) -> ClassType(new-name)
+
+  rename-classstep(|old-name, new-name):
+    Class(old-name,fs) -> Class(new-name, fs)

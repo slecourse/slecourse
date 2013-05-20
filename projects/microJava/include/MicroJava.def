@@ -1,0 +1,98 @@
+definition
+module Common
+
+exports
+
+  lexical syntax
+  
+    [a-z][a-zA-Z0-9]* 	 -> LCID
+	[A-Z][a-zA-Z0-9]* 	 -> UCID
+	[a-zA-Z][a-zA-Z0-9]* -> ID
+    "-"? [0-9]+          -> INT
+    
+    "\"" StringChar* "\"" -> STRING
+    ~[\"\n]               -> StringChar
+    "\\\""                -> StringChar
+    BackSlashChar         -> StringChar
+    "\\"                  -> BackSlashChar
+    
+    [\ \t\n\r] -> LAYOUT
+    
+    [\*]                             -> CommentChar
+    "/*" (~[\*] | CommentChar)* "*/" -> LAYOUT
+    "//" ~[\n\r]* ([\n\r] | EOF)     -> LAYOUT
+    
+    -> EOF
+  
+  lexical restrictions
+  
+    %% Ensure greedy matching for lexicals
+  
+    CommentChar   -/- [\/]
+    INT           -/- [0-9]
+    LCID          -/- [a-zA-Z0-9\_]
+	UCID          -/- [A-zA-Z0-9\_]
+	ID         	  -/- [A-zA-Z0-9\_]
+    
+    %% EOF may not be followed by any char
+    
+    EOF           -/- ~[]
+
+    %% Backslash chars in strings may not be followed by " 
+    
+    BackSlashChar -/- [\"]
+
+  context-free restrictions
+  
+    %% Ensure greedy matching for comments
+
+    LAYOUT? -/- [\ \t\n\r]
+    LAYOUT? -/- [\/].[\/]
+    LAYOUT? -/- [\/].[\*]
+
+module MicroJava
+
+imports Common
+
+exports
+
+  context-free start-symbols
+    Start
+
+  context-free syntax
+  	
+	%% programs
+    "module" UCID "{" Class* "}"    	  		-> Start {cons("Module")}
+
+	%% classes
+	"class" ID "{" Member* "}" 					-> Class {cons("Class")}
+
+	%% fields
+	NTBinding									-> Member {cons("Field")}
+
+	%% methods
+	ID "(" {NTBinding "," }* ")" ":" Type "{" (Stm ";")* "}"	-> Member{cons("Method")}
+	
+	%% statements
+    "var" ID ":" Type 							-> Stm {cons("Declare")}
+	RefCascade "=" Expr 						-> Stm {cons("Assign")}
+	"return" Expr 								-> Stm {cons("Return")}
+	
+	%% expressions
+	RefCascade "." ID "(" {Expr ","}* ")"		-> Expr {cons("Call")}
+	RefCascade 									-> Expr {cons("Id")}
+	"new" UCID "()"								-> Expr {cons("New")}
+	INT 										-> Expr {cons("NatConst")}
+	Expr "+" Expr								-> Expr {cons("Add"), assoc}
+	Expr "-" Expr								-> Expr {cons("Sub"), left}
+	Expr "*" Expr								-> Expr {cons("Mul"), assoc}
+
+	%% name-type bindings
+	ID ":" Type                   				-> NTBinding {cons("NT")}
+
+	%% types
+	"nat"										-> Type {cons("NatType")}
+    UCID                            			-> Type {cons("ClassType")}
+
+	%% reference cascades
+	{ID "."}+ 									-> RefCascade {cons("RefCascade")}

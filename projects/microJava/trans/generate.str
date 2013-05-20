@@ -1,0 +1,125 @@
+module generate
+
+imports
+  libstratego-lib
+  libstratego-gpp
+  libstratego-aterm
+  include/MicroJava
+  lib/editor-common.generated
+
+rules
+
+  // programs
+  to-java:
+    Module(mn,c*) ->$[class [mn] {
+        [c'*]
+	  }
+	]
+    with
+      c'* := <map(to-java)> c*
+  
+  // classes
+  to-java:
+    Class(n, m*) ->$[
+	  public static class [n] {
+		[m'*]
+      }
+	]
+    with
+	  m'* := <to-java> m*
+
+  // name-type bindings
+  to-java:
+	NT(vn,t) -> $[[t'] [vn]]
+	with
+	  t' := <to-java> t
+
+  // fields
+  to-java:
+	Field(f) -> $[[<to-java> f];
+	]
+
+
+  // methods
+  to-java:
+	Method(n, p*, t, s*) -> $[
+	  public [t'] [n] ([p'*]) {
+	  	[s'*]
+	  }]
+	with
+	  t' := <to-java> t;
+	  p'* := <separate-by(|",")> <to-java> p*;
+	  s'* := <separate-by(|"\n")><to-java> s*
+	  
+
+  // statements
+  to-java:
+	Declare(vn, t) -> $[[t'] [vn];]
+	with
+	  t' := <to-java> t
+	
+  to-java:
+	Assign(rs, e) -> $[[rs'] = [e'];]
+	with
+	  rs' := <to-java> rs;
+	  e' := <to-java> e
+	
+  to-java:
+	Return(e) -> $[return [e'];]
+	with
+	  e' := <to-java> e
+
+  // expressions
+  to-java:
+	Id(i) -> <to-java> i
+
+  to-java:
+	New(cn) -> $[new [<to-java> cn]()]
+
+  to-java:
+	Call(ref, mn, e*) -> $[[ref'].[mn]([e'*])]
+	with
+	  ref' := <to-java> ref;
+	  e'* := <separate-by(|",")> <to-java> e* 
+
+  to-java:
+	NatConst(n) -> n
+
+  to-java:
+	Add(e1, e2) -> $[[e1'] + [e2']]
+	with
+	  e1' := <to-java> e1;
+	  e2' := <to-java> e2
+
+  to-java:
+	Sub(e1, e2) -> $[[e1'] - [e2']]
+	with
+	  e1' := <to-java> e1;
+	  e2' := <to-java> e2
+
+  to-java:
+	Mul(e1, e2) -> $[[e1'] * [e2']]
+	with
+	  e1' := <to-java> e1;
+	  e2' := <to-java> e2
+		
+
+  // types
+  to-java:
+	NatType() -> $[int]
+  to-java:
+	ClassType(cn) -> cn
+
+  // reference cascades
+  to-java:
+	RefCascade(rs) -> <concat-strings> <separate-by(|".")> rs
+
+ to-java:
+	None() -> ""
+
+ to-java:
+	Some(x) -> <to-java> x
+
+  // map
+  to-java:
+    t* -> <map(to-java)> t*
