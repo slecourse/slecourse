@@ -10,3 +10,6 @@ Download the binary converge distribution: http://convergepl.org/releases/2.0/
 
 Run ~/converge-2.0/bin/converge query_exec.cv
 
+There is another smaller example in subdirectory cal.
+
+
