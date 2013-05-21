@@ -65,6 +65,7 @@ The assignment at hand what developed using Eclipse 3.7 (Indigo) and Spoofax plu
 * Right click on highlighted text and click "Refactor" -> "Extract members to class"
 
 
-== Authors ==
+Authors
+=======
 * Thomas Schmorleiz
 
