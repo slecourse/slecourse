@@ -1,10 +1,10 @@
 module TestIO where
 
-import System
 import AbstractSyntax
 import ParserLib
 import Parser
 import PrettyPrinter
+import System.Environment
 
 main = do
      (file1:(file2:_)) <- getArgs

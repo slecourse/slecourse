@@ -1,10 +1,10 @@
 module TestEvaluator where
 
-import System
 import AbstractSyntax
 import ParserLib
 import Parser
 import Evaluator
+import System.Environment
 
 main = do
      (file1:(file2:(expected:_))) <- getArgs
