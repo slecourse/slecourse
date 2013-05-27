@@ -1,9 +1,9 @@
 ------------------------------------------------------------------------------
 
-EXTRACT METHOD REFACTORING for JOOS
-
-This example is explained in the article
-"Typed Combinators for Generic Traversal".
+Some refactorings for the JOOS language.
+The code leverages the Strafunski StrategyLib.
+http://hackage.haskell.org/package/Strafunski-StrategyLib
+The code has been tested with GHC 7.4.
 
 JOOS is a purely object-oriented subset of Java designed by Laurie Hendren.
 It is used for research experiments and education. The grammar has 24 
@@ -12,5 +12,12 @@ was extracted from:
 
     David A. Watt. JOOS action semantics. Version 1, available from
     http://www.dcs.gla.ac.uk/~daw/publications/JOOS.ps, October 1997. 
+
+The refactorings originate from the following two papers:
+
+http://dblp.uni-trier.de/rec/bibtex/conf/padl/LammelV02
+http://dblp.uni-trier.de/rec/bibtex/conf/rule/Lammel02
+
+See the corresponding subdirectories padl02 and rule02
 
 ------------------------------------------------------------------------------
