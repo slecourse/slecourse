@@ -1,6 +1,6 @@
 module Language.Pic.Domains where
 
-type Point = (Int, Int)
+import Language.Pic.Common
 
 data Pic = Line Point Point
          | Circle Point Int
