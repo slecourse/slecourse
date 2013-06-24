@@ -1,5 +1,6 @@
 module Language.Pic.ShallowEmbedding where
 
+import Language.Pic.Common
 import Language.Pic.Domains
 
 {-
