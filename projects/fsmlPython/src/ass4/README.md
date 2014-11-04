@@ -7,4 +7,4 @@ Use "make run" to run the positive and negative test cases with depth=7. You can
 Prerequisites
 
 - See ass2
-- Also, nltk is needed: sudo easy_install nltk -- Which version?
+- Also, nltk is needed: sudo easy_install nltk -- Tested with 3.0
