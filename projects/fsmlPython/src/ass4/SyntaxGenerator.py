@@ -1,6 +1,6 @@
 import os
-from nltk.parse.generate2 import generate
-from nltk.grammar import parse_cfg
+from nltk.parse.generate import generate
+from nltk.grammar import CFG
 
 grammarstring = """
 FSM -> 'initial' 'state' '#initState#' '{' TRANS '}' STATES
@@ -10,7 +10,7 @@ TRANS -> '#input#' '/' '#action#' '->' '#newState#' ';' TRANS |
 """
 
 def generateRawTemplates(depth):
-    gram = parse_cfg(grammarstring)
+    gram = CFG.fromstring(grammarstring)
     rawTemplates = generate(gram, depth=depth)
     templatefiles = []
 
@@ -20,6 +20,6 @@ def generateRawTemplates(depth):
             templatefile.write(' '.join(state))
             templatefiles.append(filename)
 
-    print str(len(rawTemplates))+" template files generated"
+    print str(len(templatefiles))+" template files generated"
 
     return templatefiles
