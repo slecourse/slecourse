@@ -1,0 +1,34 @@
+from TurnstileHandler_generated import DefaultTurnstileHandler
+
+class Stepper():
+
+    def __init__(self):
+        self.currentState = "{{ initialState }}"
+        self.fsm = dict()
+        self.handler = DefaultTurnstileHandler()
+        {% for transition in transitions %}self.add("{{ transition[0] }}", "{{ transition[1] }}", "{{ transition[2] }}", "{{ transition[3] }}")
+        {% endfor %}
+
+    def add(self, fromState, input, action, toState):
+        if not fromState in self.fsm:
+            self.fsm[fromState] = dict()
+            self.fsm[fromState]["transitions"] = dict()
+        self.fsm[fromState]["transitions"][input] = (action, toState)
+
+    def simulateFSM_generated(self, inputList):
+        output = []
+        while inputList:
+            input = inputList.pop(0)
+            action, targetState = self.step(input)
+            item = dict()
+            item[targetState] = action
+            output.append(item)
+
+        return output
+
+    def step(self, input):
+        (action, targetState) = self.fsm[self.currentState]["transitions"][input]
+        self.handler.handle(action)
+        self.currentState = targetState
+        return action, targetState
+
