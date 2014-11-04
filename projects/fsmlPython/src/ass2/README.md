@@ -4,9 +4,23 @@ Python implementation of the Finite State Machine Language
 prerequisites : 
 
 antlr python runtime v.3.1 (http://www.antlr3.org/download/Python/antlr_python_runtime-3.1.tar.gz)
-jinja2 package (http://jinja.pocoo.org/docs/intro/#installation)
-pygraphviz package (https://pypi.python.org/pypi/pygraphviz) & an installation of graphviz on your system
 
+See here for how to install a module:
+https://docs.python.org/2/install/
+
+Perhaps, this works:
+easy_install antlr_python_runtime
+
+jinja2 package (http://jinja.pocoo.org/docs/intro/#installation)
+
+Perhaps, this works:
+easy_install Jinja2
+
+An installation of graphviz:
+http://graphviz.org/
+
+pygraphviz package (https://pypi.python.org/pypi/pygraphviz)
+easy_install may work or perhaps include/lib dirs need to be arranged.
 
 run "make build" to build the project and "make run" to run it
 
