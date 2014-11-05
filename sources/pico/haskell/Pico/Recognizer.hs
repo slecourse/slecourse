@@ -2,42 +2,15 @@ module Pico.Recognizer where
 
 import Text.Parsec
 
-{- Main functionality -}
-
+-- The type of recognition
 type Recognizer = Parsec String () ()
 
+-- Top-level recognition function
 recognize :: String -> IO (Either ParseError ())
 recognize file
  = do
       content <- readFile file
       return $ runP program () file content
-
-
-{- Lexical syntax -}
-
-name :: Recognizer
-name = do
-          letter
-          many alphaNum 
-          spaces
-
-nat :: Recognizer
-nat = do
-         many1 digit
-         spaces
-
-str :: Recognizer
-str = do
-         string "\""
-         many (noneOf "\"")
-         string "\""
-         spaces
-
-special :: String -> Recognizer
-special s = do
-               string s
-               spaces
-
 
 {- Context-free syntax -}
 
@@ -104,7 +77,7 @@ while = do
 expr :: Recognizer
 expr = do
           term
-          optional rest
+          optional expr_rest
 
 term :: Recognizer
 term = choice [name, str, nat, bracket]
@@ -115,7 +88,32 @@ bracket = do
              expr
              special ")"
 
-rest :: Recognizer
-rest = do
+expr_rest :: Recognizer
+expr_rest = do
           choice [special "||", special "+", special "-"]
           expr
+
+{- Lexical syntax -}
+
+name :: Recognizer
+name = do
+          letter
+          many alphaNum 
+          spaces
+
+nat :: Recognizer
+nat = do
+         many1 digit
+         spaces
+
+str :: Recognizer
+str = do
+         string "\""
+         many (noneOf "\"")
+         string "\""
+         spaces
+
+special :: String -> Recognizer
+special s = do
+               string s
+               spaces

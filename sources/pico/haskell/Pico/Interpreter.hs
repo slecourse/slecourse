@@ -13,10 +13,11 @@ data Value
 -- Variables stores
 type Store = Map Name Value
 
-
+-- Execute programs
 execProgram :: Program -> Maybe Store
 execProgram (_, ss) = execStms ss empty
 
+-- Execute statements
 execStms :: [Stm] -> Store -> Maybe Store
 execStms [] st = Just st
 execStms (s:ss) st = execStm s st >>= execStms ss
@@ -44,6 +45,7 @@ execStm s st
              else Just st
          _ -> Nothing
         
+-- Evaluate expressions
 evalExpr :: Expr -> Store -> Maybe Value
 evalExpr e st
  = case e of 

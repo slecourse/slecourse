@@ -14,35 +14,6 @@ parse file
       return $ runP program () file content
 
 
-{- Lexical syntax -}
-
-name :: Parser String
-name = do
-          h <- letter
-          t <- many alphaNum 
-          spaces
-          return (h:t)
-
-nat :: Parser Int
-nat = do
-         ds <- many1 digit
-         spaces
-         return (read ds :: Int)
-
-str :: Parser String
-str = do
-         string "\""
-         cs <- many (noneOf "\"")
-         string "\""
-         spaces
-         return cs
-
-special :: String -> Parser ()
-special s = do
-               string s
-               spaces
-
-
 {- Context-free syntax -}
 
 program :: Parser Program
@@ -115,7 +86,7 @@ while = do
 expr :: Parser Expr
 expr = do
           t <- term
-          option t (rest t)
+          option t (expr_rest t)
 
 term :: Parser Expr
 term = choice [ 
@@ -132,8 +103,8 @@ bracket = do
              special ")"
              return e
 
-rest :: Expr -> Parser Expr
-rest e1 = 
+expr_rest :: Expr -> Parser Expr
+expr_rest e1 = 
   do
      f <- choice [
                  special "||" >> return Conc,
@@ -142,3 +113,32 @@ rest e1 =
                  ]
      e2 <- expr
      return (f e1 e2)
+
+{- Lexical syntax -}
+
+name :: Parser String
+name = do
+          h <- letter
+          t <- many alphaNum 
+          spaces
+          return (h:t)
+
+nat :: Parser Int
+nat = do
+         ds <- many1 digit
+         spaces
+         return (read ds :: Int)
+
+str :: Parser String
+str = do
+         string "\""
+         cs <- many (noneOf "\"")
+         string "\""
+         spaces
+         return cs
+
+special :: String -> Parser ()
+special s = do
+               string s
+               spaces
+
