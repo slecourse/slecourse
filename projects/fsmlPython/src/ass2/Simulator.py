@@ -4,6 +4,7 @@ def simulateFSM(fsm, inputList):
 
     output = []
     feasibleInputs = set()
+    inputList = list(inputList)
 
     # getting the initial state and computing feasible Inputs
     for stateName, [stateDeclaration] in fsm.iteritems():

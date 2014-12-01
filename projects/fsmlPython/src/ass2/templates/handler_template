@@ -8,9 +8,6 @@ class DefaultTurnstileHandler():
     def handle(self, Action):
         self.actions[Action]()
 
-    def addHandlerFunction(self, action, function):
-        self.actions[action] = function
-
     {% for action in actions %}
     def handle{{ action|default('Empty', true)|capitalize() }}(self):
         # print "handling {{ action|default('Empty', true)|capitalize() }}"

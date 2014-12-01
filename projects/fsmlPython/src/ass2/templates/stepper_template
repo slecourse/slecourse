@@ -17,6 +17,7 @@ class Stepper():
 
     def simulateFSM_generated(self, inputList):
         output = []
+        inputList = list(inputList)
         while inputList:
             input = inputList.pop(0)
             action, targetState = self.step(input)

@@ -48,5 +48,33 @@ class TestOtherConstraints(unittest.TestCase):
     def testInfeasibleSymbol(self):
         self.assertRaises(InfeasibleSymbolException, simulateFSM, self.correctFsm, self.infeasibleSymbolInput)
 
+
+# tests if the baseline output is the same as the output which is produced by the Simulator.py module
+# and if this output is also the same as the output which is produced by the generated modules
+
+class TestSimulationOutput(unittest.TestCase):
+
+    def setUp(self):
+        # import the generated Code
+        import TurnstileHandler_generated
+        import TurnstileStepper_generated
+        self.stepper = TurnstileStepper_generated.Stepper()
+        self.input = json.load(open("../sample_input.json"))
+        self.fsm = parseFSM("../sample.fsml")
+
+    def testSimulationOutput(self):
+        # load the base line output
+        correctJsonOutput = json.load(open("../baseline_output.json"))
+
+        # produce the output of the generated modules
+        generatedJsonOutput = self.stepper.simulateFSM_generated(self.input)
+
+        # produce the output of the hand-written simulator module
+        simulatedJsonOutput = simulateFSM(self.fsm, self.input)
+
+        # assert all 3 types of output are equal
+        self.assertEqual(correctJsonOutput, simulatedJsonOutput)
+        self.assertEqual(correctJsonOutput, generatedJsonOutput)
+
 if __name__ == '__main__':
     unittest.main()
